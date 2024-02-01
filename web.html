@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+
+    <title>Flashdesk VNC</title>
+</head>
+<body>
+    <div class="chat" onclick="hide_and_close(this);">
+        <div class="background"></div>
+        <svg class="chat-bubble" width="75" height="75" viewBox="0 0 100 100">
+          <g class="bubble">
+            <path class="line line1" d="M 30.7873,85.113394 30.7873,46.556405 C 30.7873,41.101961
+            36.826342,35.342 40.898074,35.342 H 59.113981 C 63.73287,35.342
+            69.29995,40.103201 69.29995,46.784744" />
+            <path class="line line2" d="M 13.461999,65.039335 H 58.028684 C
+              63.483128,65.039335
+              69.243089,59.000293 69.243089,54.928561 V 45.605853 C
+              69.243089,40.986964 65.02087,35.419884 58.339327,35.419884" />
+          </g>
+          <circle class="circle circle1" r="1.9" cy="50.7" cx="42.5" />
+          <circle class="circle circle2" cx="49.9" cy="50.7" r="1.9" />
+          <circle class="circle circle3" r="1.9" cy="50.7" cx="57.3" />
+        </svg>
+    </div>
+    <div id="chat_window">
+        <div id="chat_section">
+            <div id="bot">
+                <img class="round image" width="30" height="30" avatar="Flash Desk">
+                <img class="round image" width="30" height="30" avatar="Admin" style="display: none;">
+                <p class="text">Hello today is a good day!!!</p>
+            </div>
+            <!-- <div id="user">
+                <img class="round image" width="30" height="30" avatar="Admin">
+                <p class="text">Hello today is a good day!!!</p>
+            </div> -->
+            
+        </div>
+        
+        <div id="user_actions">
+            <input type="text" name="prompt" placeholder="Enter text here" id="prompt">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+    <div id="screen"></div>
+    
+    <script type="module" crossorigin="anonymous">
+        import RFB from './core/rfb.js';
+        let rfb;
+        let password;
+        let url = "ws://localhost:49152/websockify"
+        rfb = new RFB(document.getElementById('screen'), url,
+                      { credentials: { password: password } });
+        rfb.resizeSession = true;
+        rfb.scaleViewport = false;
+        rfb.viewOnly = false;  
+
+    </script>
+
+    <script src="avatar.js"></script>
+    <script src="index.js"></script>
+</body>
+</html>
+
