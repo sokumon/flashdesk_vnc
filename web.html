@@ -50,7 +50,7 @@
         import RFB from './core/rfb.js';
         let rfb;
         let password;
-        let url = "ws://localhost:49152/websockify"
+        let url = `ws://${window.location.host}/websockify`
         rfb = new RFB(document.getElementById('screen'), url,
                       { credentials: { password: password } });
         rfb.resizeSession = true;
