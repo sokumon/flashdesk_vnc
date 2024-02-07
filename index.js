@@ -11,8 +11,8 @@ function hide_and_close(el){
 }
 
 
-let global_base_url = "http://192.168.192.194:11435";
-
+let global_base_url = window.location.protocol +"//" + window.location.hostname;
+console.log(global_base_url)
 function createchatElement(id,text) {
     // Create the div element
     let chat_section = document.getElementById("chat_section");
@@ -77,7 +77,7 @@ function sendMessage() {
         // Append the user div to the chat section
         document.getElementById("chat_section").appendChild(userDiv);
 
-        fetchCollections(promptInput.value)
+        fetch_info(promptInput.value)
 
         // Clear the input field
         promptInput.value = "";
@@ -274,3 +274,47 @@ function concatenateContent(jsonArray) {
     }
 }
 
+async function fetch_info(query){
+    try {
+        const baseUrl = `${global_base_url}`;
+        const route = ":8000/api/method/flashdesk.api.ai.process_pdfs.fetch_answer";
+
+        console.log(`${baseUrl}${route}`)
+        // const myHeaders = new Headers();
+        // myHeaders.append("Content-Type", "application/json");
+        // myHeaders.append("Accept","application/json")
+
+        // var raw = JSON.stringify({
+        //     "query": query
+        // });
+          
+        // const requestOptions = {
+        //     method: 'POST',
+        //     body: raw,
+        // };
+
+        var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+var raw = JSON.stringify({
+  "query" : query
+});
+
+var requestOptions = {
+  method: 'POST',
+  headers: myHeaders,
+  body: raw,
+  redirect: 'follow'
+};
+
+fetch(`${baseUrl}${route}`, requestOptions)
+  .then(response => response.json())
+  .then(result => createchatElement("bot",result.message))
+  .catch(error => console.log('error', error));
+
+
+     
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
