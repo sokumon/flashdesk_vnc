@@ -71,58 +71,33 @@
         rfb.scaleViewport = false;
         rfb.viewOnly = false;  
 
-//         document.addEventListener("visibilitychange",function(){
-
-//             if (document.visibilityState === 'visible') {
-//     // Page is now visible and focused, let's try to access the clipboard
-//     if (navigator.clipboard) {
-//       navigator.clipboard.readText()
-//         .then(text => {
-//           console.log("Clipboard contents:", text);
-//           // Do something with the clipboard contents
-//         })
-//         .catch(err => {
-//           console.error("Failed to read clipboard contents:", err);
-//         });
-//     } else {
-//       console.error("Clipboard API not supported");
-//     }
-//   }
-            
-//             })
-        async function read_clipboard(){
-            let result = await navigator.clipboard.read()
-            console.log(result)
+        document.addEventListener('focus', function(event) {
+        // Check if the event target is the document or any of its descendants
+        if (event.target === document || document.contains(event.target)) {
+            // The document or one of its descendants gained focus
+            if (navigator.clipboard) {
+            navigator.clipboard.readText()
+                .then(data => {
+                rfb.clipboardPasteFrom(data);
+                // Do something with the clipboard contents
+                })
+                .catch(err => {
+                console.error("Failed to read clipboard contents:", err);
+                });
+            } else {
+                console.error("Clipboard API not supported");
+            }
         }
-document.addEventListener('focus', function(event) {
-  // Check if the event target is the document or any of its descendants
-  if (event.target === document || document.contains(event.target)) {
-    // The document or one of its descendants gained focus
-    if (navigator.clipboard) {
-      navigator.clipboard.readText()
-        .then(data => {
-         rfb.clipboardPasteFrom(data);
-          // Do something with the clipboard contents
-        })
-        .catch(err => {
-          console.error("Failed to read clipboard contents:", err);
-        });
-    } else {
-      console.error("Clipboard API not supported");
-    }
-
-    // You can perform actions here when the document/tab gains focus
-  }
-}, true);
+        }, true);
 
     rfb.addEventListener("clipboard", clipboard_recieve);
 
     async function clipboard_recieve(e){
         try {
-        await navigator.clipboard.writeText(e.detail.text);
-    } catch (error) {
-    console.error(error.message);
-    }
+            await navigator.clipboard.writeText(e.detail.text);
+        }catch (error) {
+            console.error(error.message);
+        }
     }
     </script>
 
